@@ -1,10 +1,12 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from src.base.services import get_path_upload_avatar
+from src.user.user_manager import MyUserManager
 
 
-class User(models.Model):
+class User(AbstractBaseUser):
     GENDER_CHOICES = (
         ("m", "man"),
         ("w", "woman")
@@ -15,18 +17,17 @@ class User(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     avatar = models.ImageField(
         upload_to=get_path_upload_avatar,
-        blank=True,
-        null=True,
         validators=[FileExtensionValidator(allowed_extensions=["jpg"])]
     )
-    is_staff = models.BooleanField(default=False, blank=True)
-    is_super_user = models.BooleanField(default=False, blank=True)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    USERNAME_FIELD = 'email'
 
-    @property
-    def is_authenticated(self):
-        """Всегда возвращает True. Это способ узнать, был ли пользователь аутентифицирован"""
-
-        return True
+    object = MyUserManager()
 
     def __str__(self):
         return self.email
+
+    @property
+    def is_staff(self):
+        return self.is_admin

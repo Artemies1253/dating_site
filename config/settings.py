@@ -1,4 +1,4 @@
-
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -108,5 +108,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny"
     ]
 }
+MEDIA_URL = "/midia/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# AUTH_USER_MODEL = "src.user.models.User"
+AUTH_USER_MODEL = "user.User"
