@@ -24,9 +24,11 @@ def get_avatar_with_water_mark(image) -> InMemoryUploadedFile:
         correct_size_watermark, (int(avatar_width / 1.25), int(avatar_height / 1.25)), mask=correct_size_watermark
     )
 
-    image_file = BytesIO(transparent.tobytes())
+    image_file = BytesIO()
     transparent.save(image_file, format="png")
 
-    avatar_with_water_mark = SimpleUploadedFile(name=image.name, content=mp.getvalue(), content_type="image/jpeg")
+    avatar_with_water_mark = SimpleUploadedFile(
+        name=image.name, content=image_file.getvalue(), content_type="image/jpeg"
+    )
     return avatar_with_water_mark
 
