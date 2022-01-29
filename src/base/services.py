@@ -1,6 +1,7 @@
 import os
 from io import BytesIO
 
+import requests
 from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile, SimpleUploadedFile
@@ -39,16 +40,20 @@ def get_mutual_sympathy_text(user_from_like):
     return text
 
 
-def get_data_address(address):
+def get_data_address(address: str) -> dict:
     data = {}
     response = requests.get(url=f"https://geocode-maps.yandex.ru/1.x/?apikey={settings.API_YANDEX_KEY}&"
                                 f"format=json&geocode={address}")
-    point = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"][
-        "pos"].split(" ")
+    point = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]\
+        .split(" ")
+
     data["longitude"] = point[0]
     data["latitude"] = point[1]
+
     address = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"][
         "metaDataProperty"]["GeocoderMetaData"]["text"]
+
     data["address"] = address
     data["coordinates"] = f"{point[1]}, {point[0]}"
+
     return data
