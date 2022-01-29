@@ -1,5 +1,6 @@
 from django.urls import include, path
 
 urlpatterns = [
-    path("oauth/", include("src.authorization.urls"))
+    path("auth/", include("src.authorization.urls")),
+    path("like/", include("src.like.urls")),
 ]

@@ -2,6 +2,7 @@ from django.contrib import auth
 from rest_framework import generics, status, permissions
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
+from django.core.mail import EmailMessage
 
 
 from src.authorization.serializers import RegistrationSerializer, LoginSerializer
@@ -20,7 +21,7 @@ class RegistrationAPIView(generics.GenericAPIView):
 
             user = User.object.get(email=serializer.validated_data.get("email"))
 
-            return Response({"data": user.id}, status=status.HTTP_201_CREATED)
+            return Response({"user_id": user.id}, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.GenericAPIView):
@@ -45,5 +46,6 @@ class LoginAPIView(generics.GenericAPIView):
                 raise AuthenticationFailed("Не правильно ведён пароль")
 
             auth_data = create_token(user_id=user.id)
+            auth_data.pop("token_type")
 
-            return Response({"data": auth_data})
+            return Response(auth_data, status=status.HTTP_200_OK)

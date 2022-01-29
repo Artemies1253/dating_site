@@ -223,3 +223,6 @@ sqlite.db
 # media
 !*media/.gitkeep
 media/*
+
+# config
+conf.py

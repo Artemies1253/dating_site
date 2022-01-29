@@ -32,3 +32,8 @@ def get_avatar_with_water_mark(image) -> InMemoryUploadedFile:
     )
     return avatar_with_water_mark
 
+
+def get_mutual_sympathy_text(user_from_like):
+    text = f"Вы понравились {user_from_like.first_name} {user_from_like.last_name}! {user_from_like.email}. " \
+           f"Напишите ему."
+    return text
