@@ -118,6 +118,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny"
     ]
 }
+
 MEDIA_URL = "/midia/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 

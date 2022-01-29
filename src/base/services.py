@@ -37,3 +37,18 @@ def get_mutual_sympathy_text(user_from_like):
     text = f"Вы понравились {user_from_like.first_name} {user_from_like.last_name}! {user_from_like.email}. " \
            f"Напишите ему."
     return text
+
+
+def get_data_address(address):
+    data = {}
+    response = requests.get(url=f"https://geocode-maps.yandex.ru/1.x/?apikey={settings.API_YANDEX_KEY}&"
+                                f"format=json&geocode={address}")
+    point = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"][
+        "pos"].split(" ")
+    data["longitude"] = point[0]
+    data["latitude"] = point[1]
+    address = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"][
+        "metaDataProperty"]["GeocoderMetaData"]["text"]
+    data["address"] = address
+    data["coordinates"] = f"{point[1]}, {point[0]}"
+    return data
