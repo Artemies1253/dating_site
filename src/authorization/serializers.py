@@ -9,6 +9,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password_repeat = serializers.CharField(min_length=4, max_length=30)
     avatar = serializers.ImageField()
 
+
     def validate(self, values):
         password = values.get("password")
         password_repeat = values.get("password_repeat")
@@ -20,6 +21,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.object.create_user(email=validated_data.get("email"), password=validated_data.get("password"))
         user.first_name = validated_data.get("first_name")
+        user.last_name = validated_data.get("last_name")
+        user.gender = validated_data.get("gender")
         avatar = validated_data.get("avatar")
         avatar_with_water_mark = get_avatar_with_water_mark(avatar)
         user.avatar = avatar_with_water_mark

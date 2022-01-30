@@ -1,8 +1,7 @@
 from django.contrib import auth
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
-from django.core.mail import EmailMessage
 
 
 from src.authorization.serializers import RegistrationSerializer, LoginSerializer

@@ -1,7 +1,8 @@
 from django.urls import path
 
-from src.user.views import CreateLike
+from src.user.views import UserList
+
 
 urlpatterns = [
-    path("create", CreateLike.as_view())
+    path("list", UserList.as_view())
 ]
