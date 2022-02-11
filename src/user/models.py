@@ -21,10 +21,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         validators=[FileExtensionValidator(allowed_extensions=["jpg"])]
     )
     is_admin = models.BooleanField(default=False)
-    adress = models.CharField(max_length=150)
-    latitude = models.DecimalField(max_digits=18, decimal_places=15)
-    longitude = models.DecimalField(max_digits=18, decimal_places=15)
-    
+    address = models.CharField(max_length=150)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
+
     USERNAME_FIELD = 'email'
 
     object = MyUserManager()

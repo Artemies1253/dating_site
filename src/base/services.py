@@ -44,7 +44,6 @@ def get_data_address(address: str) -> dict:
     data = {}
     response = requests.get(url=f"https://geocode-maps.yandex.ru/1.x/?apikey={settings.API_YANDEX_KEY}&"
                                 f"format=json&geocode={address}")
-    print(response)
     point = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]\
         .split(" ")
 
@@ -54,7 +53,6 @@ def get_data_address(address: str) -> dict:
     address = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"][
         "metaDataProperty"]["GeocoderMetaData"]["text"]
 
-    data["adress"] = address
-    data["coordinates"] = f"{point[1]}, {point[0]}"
+    data["address"] = address
 
     return data

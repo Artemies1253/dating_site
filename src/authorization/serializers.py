@@ -7,7 +7,6 @@ from src.user.models import User
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=4, max_length=30)
     password_repeat = serializers.CharField(min_length=4, max_length=30)
-    avatar = serializers.ImageField()
 
     def validate(self, values):
         password = values.get("password")
@@ -22,17 +21,17 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.first_name = validated_data.get("first_name")
         user.last_name = validated_data.get("last_name")
         user.gender = validated_data.get("gender")
-        raw_adress = validated_data.get('adress')
-        data_adress = get_data_address(raw_adress)
-        print(data_adress)
-        if data_adress:
-            user.longitude = data_adress["longitude"]
-            user.latitude = data_adress["latitude"]
-            user.adress = data_adress["adress"]
+        raw_address = validated_data.get('address')
+        data_address = get_data_address(raw_address)
+        if data_address:
+            user.longitude = data_address["longitude"]
+            user.latitude = data_address["latitude"]
+            user.address = data_address["address"]
         avatar = validated_data.get("avatar")
         avatar_with_water_mark = get_avatar_with_water_mark(avatar)
         user.avatar = avatar_with_water_mark
         user.save()
+        user = User.object.get(email=validated_data.get("email"))
         return user
 
     class Meta:
