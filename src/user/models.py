@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
@@ -6,7 +7,7 @@ from src.base.services import get_path_upload_avatar
 from src.user.user_manager import MyUserManager
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = (
         ("m", "man"),
         ("w", "woman")
@@ -19,7 +20,6 @@ class User(AbstractBaseUser):
         upload_to=get_path_upload_avatar,
         validators=[FileExtensionValidator(allowed_extensions=["jpg"])]
     )
-    is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
 

@@ -9,7 +9,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password_repeat = serializers.CharField(min_length=4, max_length=30)
     avatar = serializers.ImageField()
 
-
     def validate(self, values):
         password = values.get("password")
         password_repeat = values.get("password_repeat")
@@ -31,7 +30,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ("is_admin", "is_active")
+        exclude = ("is_admin",)
 
 
 class LoginSerializer(serializers.Serializer):
