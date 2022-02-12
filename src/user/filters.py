@@ -7,6 +7,4 @@ class UserListFilter(filters.FilterSet):
         model = User
         fields = {
             "gender": ("iexact",),
-            "first_name": ("iexact",),
-            "last_name": ("iexact",),
         }

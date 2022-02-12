@@ -9,8 +9,8 @@ from src.user.user_manager import MyUserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = (
-        ("m", "man"),
-        ("w", "woman")
+        ("m", "male"),
+        ("f", "female")
     )
     email = models.EmailField(max_length=150, unique=True)
     first_name = models.CharField(max_length=50)
@@ -21,6 +21,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         validators=[FileExtensionValidator(allowed_extensions=["jpg"])]
     )
     is_admin = models.BooleanField(default=False)
+    address = models.CharField(max_length=150)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
+
     USERNAME_FIELD = 'email'
 
     objects = MyUserManager()

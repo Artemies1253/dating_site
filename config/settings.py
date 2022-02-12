@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "src.user",
     "src.authorization",
     "src.like",
+    "src.base",
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,7 @@ EMAIL_HOST_USER = conf.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = conf.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = conf.EMAIL_USE_TLS
 EMAIL_USE_SSL = conf.EMAIL_USE_SSL
+API_YANDEX_KEY = conf.API_YANDEX_KEY
 
 
 STATIC_URL = 'static/'
