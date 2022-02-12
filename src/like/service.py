@@ -6,12 +6,12 @@ from src.user.models import User
 from src.base.services import get_mutual_sympathy_text
 
 
-
 def is_mutual_like(user_1: User, user_2: User):
     like_1 = Like.objects.filter(user=user_1, liked_user=user_2)
     like_2 = Like.objects.filter(user=user_2, liked_user=user_1)
     if like_1.exists() and like_2.exists():
         return True
+
 
 def send_email_of_like(user_1: User, user_2: User):
     email_1 = EmailMessage(

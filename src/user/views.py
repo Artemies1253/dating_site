@@ -16,7 +16,7 @@ class UserList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        queryset = User.object.all()
+        queryset = User.objects.all()
         user = self.request.user
         longitude = user.longitude
         latitude = user.latitude
@@ -24,12 +24,12 @@ class UserList(generics.ListAPIView):
         if distance:
             distance = int(distance)
             border_coordinates = get_border_coordinates(longitude, latitude, distance)
-            queryset = User.object.filter(
+            queryset = User.objects.filter(
                 longitude__lte=border_coordinates['max_longitude'],
                 longitude__gte=border_coordinates['min_longitude'],
                 latitude__lte=border_coordinates['max_latitude'],
                 latitude__gte=border_coordinates['min_latitude'],
-                ).exclude(id=user.id)
+            ).exclude(id=user.id)
         gender = self.request.query_params.get("gender")
         if gender:
             queryset = queryset.filter(gender=gender)

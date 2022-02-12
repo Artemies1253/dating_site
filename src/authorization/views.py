@@ -3,7 +3,6 @@ from rest_framework import generics, status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 
-
 from src.authorization.serializers import RegistrationSerializer, LoginSerializer
 from src.user.models import User
 from .services import create_token

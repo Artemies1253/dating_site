@@ -31,7 +31,6 @@ class CreateLikeSerializer(serializers.Serializer):
 
 
 class LikeDetailSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Like
         fields = "__all__"
