@@ -226,3 +226,4 @@ media/*
 
 # config
 conf.py
+src/*/migrations/*
