@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "src.user",
     "src.authorization",
     "src.like",
+    # "src.base",
 ]
 
 MIDDLEWARE = [

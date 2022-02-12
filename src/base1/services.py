@@ -6,7 +6,6 @@ from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile, SimpleUploadedFile
 
-from src.user.models import User
 
 DELTA_LONGITUDE_1KM = 0.016
 DELTA_LATITUDE_1KM = 0.009
@@ -62,7 +61,7 @@ def get_data_address(address: str) -> dict:
     return data
 
 def get_nearest_users(user, distance):
-    print(type(user))
+    from src.user.models import User
     longitude = user.longitute
     latitude = user.latitude
     delta_longitude = DELTA_LONGITUDE_1KM * distance
