@@ -34,6 +34,3 @@ class UserList(generics.ListAPIView):
         if gender:
             queryset = queryset.filter(gender=gender)
         return queryset
-
-
-

@@ -73,4 +73,5 @@ def get_border_coordinates(longitude, latitude, distance):
         'min_longitude': min_longitude,
         'max_latitude': max_latitude,
         'min_latitude': min_latitude
-    } 
+    }
+    
