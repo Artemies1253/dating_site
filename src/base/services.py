@@ -6,7 +6,6 @@ from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile, SimpleUploadedFile
 
-from src.user.models import User
 
 DELTA_LONGITUDE_1KM = 0.016
 DELTA_LATITUDE_1KM = 0.009
@@ -61,18 +60,20 @@ def get_data_address(address: str) -> dict:
 
     return data
 
-def get_nearest_users(user, distance):
-    print(type(user))
-    longitude = user.longitute
-    latitude = user.latitude
+def get_border_coordinates(longitude, latitude, distance):
     delta_longitude = DELTA_LONGITUDE_1KM * distance
     delta_latitude = DELTA_LATITUDE_1KM * distance
-    nearest_users_queryset = User.object.filter(longitude__lte=longitude+delta_longitude)\
-                                            .exclude(longitude__lt=longitude-delta_longitude)\
-                                            .exclude(latitude__gt=latitude+delta_latitude)\
-                                            .exclude(latitude__lt=latitude-delta_latitude)\
-                                            .exclude(id=user.id)
-    return nearest_users_queryset   
+    max_longitude = longitude+delta_longitude
+    min_longitude = longitude-delta_longitude
+    max_latitude = latitude+delta_latitude
+    min_latitude = latitude-delta_latitude
+    
+    return {
+        'max_longitude': max_longitude,
+        'min_longitude': min_longitude,
+        'max_latitude': max_latitude,
+        'min_latitude': min_latitude
+    } 
 
                                          
 # long = User.objects.get('longitude')

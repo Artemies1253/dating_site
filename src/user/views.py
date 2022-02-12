@@ -1,10 +1,8 @@
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.views import APIView
-from rest_framework import viewsets
-from rest_framework.response import Response
-from src.base.services import get_nearest_users
+from rest_framework import permissions
 
+from src.base.services import get_border_coordinates
 from src.user.filters import UserListFilter
 from src.user.models import User
 from src.user.serializer import UserDetailSerializer
@@ -15,20 +13,30 @@ class UserList(generics.ListAPIView):
     queryset = User.object.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = UserListFilter
+    permission_classes = (permissions.IsAuthenticated,)
     
     
 class NearestUsers(generics.ListAPIView):
     serializer_class = UserDetailSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     #queryset = User.object.all()
     # filter_backends = (DjangoFilterBackend,)
     # filterset_class = UserListFilter    
 
     def get_queryset(self):
         user = self.request.user
+        print(user.longitude)
+        user = User.object.get(id=user.id)
+        longitude = user.longitute
+        latitude = user.latitude
         distance = 1
-        nearest_users = get_nearest_users(user, distance)
-
-        return nearest_users
+        border_coordinates = get_border_coordinates(longitude, latitude, distance)
+        nearest_users_queryset = User.object.filter(longitude__lte=border_coordinates['max_longitude'])\
+                                    .exclude(longitude__lt=border_coordinates['min_longitude'])\
+                                    .exclude(latitude__gt=border_coordinates['max_latitude'])\
+                                    .exclude(latitude__lt=border_coordinates['min_latitude'])\
+                                    .exclude(id=user.id)
+        return nearest_users_queryset
 
 # class NearestUsers(viewsets.ViewSet):
 #     #queryset = User.object.all()
