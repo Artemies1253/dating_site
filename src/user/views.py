@@ -8,7 +8,7 @@ from src.user.serializer import UserDetailSerializer
 
 class UserList(generics.ListAPIView):
     serializer_class = UserDetailSerializer
-    queryset = User.object.all()
+    queryset = User.objects.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = UserListFilter
 
