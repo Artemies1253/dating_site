@@ -10,7 +10,7 @@ class CreateLikeSerializer(serializers.Serializer):
     liked_user_id = serializers.IntegerField()
 
     def validate_liked_user_id(self, value):
-        if not User.objects.filter(id=value).exists():
+        if not User.objects.filter(id=value, is_delete=False).exists():
             raise ValidationError("Юзер с таким id не найден")
         return value
 
@@ -25,7 +25,7 @@ class CreateLikeSerializer(serializers.Serializer):
         from_like_user = User.objects.get(id=from_like_user_id)
         liked_user = User.objects.get(id=liked_user_id)
 
-        like = Like.objects.get_or_create(user=from_like_user, liked_user=liked_user)
+        like = Like.objects.get_or_create(owner_user=from_like_user, liked_user=liked_user)
 
         return like
 
