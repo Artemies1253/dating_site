@@ -11,7 +11,6 @@ from src.user.serializer import UserDetailSerializer
 
 class UserList(generics.ListAPIView):
     serializer_class = UserDetailSerializer
-    # queryset = User.object.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = UserListFilter
     permission_classes = (permissions.IsAuthenticated,)
