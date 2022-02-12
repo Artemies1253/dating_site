@@ -31,7 +31,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         avatar_with_water_mark = get_avatar_with_water_mark(avatar)
         user.avatar = avatar_with_water_mark
         user.save()
-        user = User.object.get(email=validated_data.get("email"))
         return user
 
     class Meta:

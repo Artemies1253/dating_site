@@ -74,16 +74,3 @@ def get_border_coordinates(longitude, latitude, distance):
         'max_latitude': max_latitude,
         'min_latitude': min_latitude
     } 
-
-                                         
-# long = User.objects.get('longitude')
-# long = User.objects.filter('logitude' lt 'longitude+0.16' and 'logitude' gt 'longtude-0.16' )
-
-# def get_user_coordinates(user_id):
-#     user = User.objects.filter(id=user_id)
-#     longitude = user.longitute
-#     latitude = user.latitude
-#     return longitude, latitude
-
-# def nearest_users():
-    
