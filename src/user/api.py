@@ -4,7 +4,6 @@ from rest_framework import permissions
 from rest_framework.response import Response
 
 from src.authorization.services import create_token
-from src.base.permission import IsOwnerUserPermission
 from src.base.services import get_border_coordinates
 from src.user.filters import UserListFilter
 from src.user.models import User
@@ -44,7 +43,7 @@ class UserDetailAPIView(generics.RetrieveAPIView):
 
 
 class UserAPIView(generics.GenericAPIView):
-    permissions = (IsOwnerUserPermission,)
+    permissions = (permissions.IsAuthenticated,)
 
     def get(self, request):
         serializer = UserInfoSerializer(self.request.user)
