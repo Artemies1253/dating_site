@@ -27,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-    object = MyUserManager()
+    objects = MyUserManager()
 
     def __str__(self):
         return self.email

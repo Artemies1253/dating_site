@@ -18,7 +18,7 @@ class RegistrationAPIView(generics.GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
-            user = User.object.get(email=serializer.validated_data.get("email"))
+            user = User.objects.get(email=serializer.validated_data.get("email"))
 
             return Response({"user_id": user.id}, status=status.HTTP_201_CREATED)
 
@@ -31,7 +31,7 @@ class LoginAPIView(generics.GenericAPIView):
 
         if serializer.is_valid(raise_exception=True):
             email = serializer.validated_data.get("email")
-            user = User.object.filter(email=email)
+            user = User.objects.filter(email=email)
 
             if not user:
                 raise AuthenticationFailed("Нет пользователя с данным email")

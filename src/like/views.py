@@ -17,7 +17,7 @@ class CreateLike(generics.GenericAPIView):
         serializer = self.serializer_class(data=request_data)
         if serializer.is_valid(raise_exception=True):
             like = serializer.save()
-            liked_user = User.object.get(id=serializer.validated_data.get("liked_user_id"))
+            liked_user = User.objects.get(id=serializer.validated_data.get("liked_user_id"))
             from_like_user = request.user
 
             if like[1]:

@@ -14,7 +14,7 @@ class UserList(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = UserListFilter
     permission_classes = (permissions.IsAuthenticated,)
-    
+
     def get_queryset(self):
         queryset = User.object.all()
         user = self.request.user
@@ -32,9 +32,8 @@ class UserList(generics.ListAPIView):
                 ).exclude(id=user.id)
         gender = self.request.query_params.get("gender")
         if gender:
-            queryset = queryset.filter(gender=gender)                                  
+            queryset = queryset.filter(gender=gender)
         return queryset
-    
 
 
-    
+
