@@ -42,7 +42,7 @@ class Ava(models.Model):
                               upload_to=get_path_upload_avatar,
                               validators=[FileExtensionValidator(allowed_extensions=["jpg"])])
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='ava')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
     is_active = models.BooleanField(default=True)
 
 

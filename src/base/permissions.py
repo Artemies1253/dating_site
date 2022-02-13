@@ -1,0 +1,6 @@
+from rest_framework import permissions
+
+
+class IsAuthor(permissions.IsAuthenticated):
+    def get_object_permission(self, request, obj):
+        return obj.user == request.user

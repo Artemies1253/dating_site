@@ -1,12 +1,15 @@
-from urllib import request
-from rest_framework import generics
+from rest_framework import generics, status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions
+from rest_framework.mixins import DestroyModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from src.base.services import get_border_coordinates
+from src.base.permissions import IsAuthor
 from src.user.filters import UserListFilter
-from src.user.models import User, Ava
-from src.user.serializer import UserDetailSerializer, AvatarSerializer
+from src.user.models import User, Ava, UserImage
+from src.user.serializer import UserDetailSerializer, AvatarSerializer, ImageSerializer
 
 
 class UserList(generics.ListAPIView):
@@ -38,11 +41,38 @@ class UserList(generics.ListAPIView):
 
 class CreateAvatar(generics.CreateAPIView):
     serializer_class = AvatarSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        current_avatar = Ava.objects.get(is_active=True, user_id=self.request.user.id)
-        current_avatar.is_active = False
-        current_avatar.save()
         user = self.request.user
         return serializer.save(user=user)
 
+
+class DeleteAvatar(generics.DestroyAPIView):
+    queryset = Ava.objects.all()
+    serializer_class = AvatarSerializer
+    permission_classes = [IsAuthor]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.is_active:
+            last_avatar = Ava.objects.filter(user=request.user).last()
+            last_avatar.is_active = True
+            last_avatar.save()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CreateImage(generics.CreateAPIView):
+    serializer_class = ImageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        return serializer.save(user=user)
+
+
+class DeleteImage(generics.DestroyAPIView):
+    queryset = UserImage.objects.all()
+    serializer_class = ImageSerializer
+    permission_classes = [IsAuthor]
