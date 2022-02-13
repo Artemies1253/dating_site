@@ -35,3 +35,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         return self.is_admin
+
+
+class Ava(models.Model):
+    photo = models.ImageField(default='/media/avatar/default_avatar.jpg',
+                              upload_to=get_path_upload_avatar,
+                              validators=[FileExtensionValidator(allowed_extensions=["jpg"])])
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='ava')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+
+class UserImage(models.Model):
+    image = models.ImageField()
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='image')
+    created_at = models.DateTimeField(auto_now_add=True)
