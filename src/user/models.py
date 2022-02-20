@@ -24,6 +24,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=150)
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
+    hobby = models.TextField(max_length=1000, null=True, blank=True)
+    about_myself = models.TextField(max_length=3000, null=True, blank=True)
+    status_text = models.CharField(max_length=255, null=True, blank=True)
+    favorite_quotes = models.TextField(max_length=1000, null=True, blank=True)
+    purpose_relationship = models.CharField(max_length=50, null=True, blank=True)
+    is_delete = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
 

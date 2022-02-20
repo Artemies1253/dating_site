@@ -3,7 +3,6 @@ from rest_framework import generics, status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 
-
 from src.authorization.serializers import RegistrationSerializer, LoginSerializer
 from src.user.models import User
 from .services import create_token
@@ -27,11 +26,12 @@ class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
+
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
             email = serializer.validated_data.get("email")
-            user = User.objects.filter(email=email)
+            user = User.objects.filter(email=email, is_delete=False)
 
             if not user:
                 raise AuthenticationFailed("Нет пользователя с данным email")
@@ -47,4 +47,4 @@ class LoginAPIView(generics.GenericAPIView):
             auth_data = create_token(user_id=user.id)
             auth_data.pop("token_type")
 
-            return Response(auth_data, status=status.HTTP_200_OK)
+            return Response(auth_data, status=status.HTTP_201_CREATED)

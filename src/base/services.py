@@ -6,9 +6,9 @@ from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile, SimpleUploadedFile
 
-
 DELTA_LONGITUDE_1KM = 0.016
 DELTA_LATITUDE_1KM = 0.009
+
 
 def get_path_upload_avatar(instanse, file):
     """Построение пути к файлу, format: (media)/avatar/user_id/photo.jpg"""
@@ -47,7 +47,7 @@ def get_data_address(address: str) -> dict:
     data = {}
     response = requests.get(url=f"https://geocode-maps.yandex.ru/1.x/?apikey={settings.API_YANDEX_KEY}&"
                                 f"format=json&geocode={address}")
-    point = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]\
+    point = response.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"] \
         .split(" ")
 
     data["longitude"] = point[0]
@@ -60,18 +60,18 @@ def get_data_address(address: str) -> dict:
 
     return data
 
+
 def get_border_coordinates(longitude, latitude, distance):
     delta_longitude = DELTA_LONGITUDE_1KM * distance
     delta_latitude = DELTA_LATITUDE_1KM * distance
-    max_longitude = longitude+delta_longitude
-    min_longitude = longitude-delta_longitude
-    max_latitude = latitude+delta_latitude
-    min_latitude = latitude-delta_latitude
-    
+    max_longitude = longitude + delta_longitude
+    min_longitude = longitude - delta_longitude
+    max_latitude = latitude + delta_latitude
+    min_latitude = latitude - delta_latitude
+
     return {
         'max_longitude': max_longitude,
         'min_longitude': min_longitude,
         'max_latitude': max_latitude,
         'min_latitude': min_latitude
     }
-    
