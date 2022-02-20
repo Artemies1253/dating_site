@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "src.authorization",
     "src.like",
     "src.base",
+    "src.message",
 ]
 
 MIDDLEWARE = [
