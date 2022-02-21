@@ -29,7 +29,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     status_text = models.CharField(max_length=255, null=True, blank=True)
     favorite_quotes = models.TextField(max_length=1000, null=True, blank=True)
     purpose_relationship = models.CharField(max_length=50, null=True, blank=True)
-    is_delete = models.BooleanField(default=False)
+    is_delete = models.BooleanField(default=False, blank=True)
+    is_verifired = models.BooleanField(default=False, blank=True)
 
     USERNAME_FIELD = 'email'
 

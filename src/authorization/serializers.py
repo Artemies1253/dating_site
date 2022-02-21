@@ -1,5 +1,8 @@
+from django.contrib import auth
 from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed
 
+from src.authorization.services import create_token
 from src.base.services import get_avatar_with_water_mark, get_data_address
 from src.user.models import User
 
@@ -45,3 +48,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(min_length=4, max_length=30)
+
+    def validate_email(self, value):
+        user = User.objects.filter(email=value, is_delete=False)
+
+        if not user:
+            raise serializers.ValidationError("Нет пользователя с данным email")
+
+        return value
