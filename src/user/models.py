@@ -50,7 +50,7 @@ class Ava(models.Model):
                               validators=[FileExtensionValidator(allowed_extensions=["jpg"])])
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='ava')
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, blank=True)
 
 
 class UserImage(models.Model):

@@ -65,7 +65,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ava
-        fields = ("photo", "is_active")
+        fields = ("photo",)
 
     def create(self, validated_data):
         user = validated_data['user']

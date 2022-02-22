@@ -79,13 +79,17 @@ class TestMessageListView(APITestCase):
         self.client.force_authenticate(self.user1)
         response = self.client.patch(url, data=json_data, content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.message1.refresh_from_db()
+        self.assertEqual(data['text'], self.message1.text)
 
     def test_message_delete(self):
+        self.assertTrue(self.message1)
         self.assertEqual(self.count_message, Message.objects.all().count())
         url = reverse('message_update_or_delete', args=(self.message1.id,))
         self.client.force_authenticate(self.user1)
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+        self.assertFalse(Message.objects.filter(id=self.message1.id).exists())
         self.assertEqual(self.count_message - 1, Message.objects.all().count())
 
     def test_message_delete_not_authenticated(self):
