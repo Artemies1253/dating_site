@@ -5,6 +5,9 @@ import requests
 from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile, SimpleUploadedFile
+from django.core.mail import EmailMessage
+from loguru import logger
+
 
 DELTA_LONGITUDE_1KM = 0.016
 DELTA_LATITUDE_1KM = 0.009
@@ -75,3 +78,29 @@ def get_border_coordinates(longitude, latitude, distance):
         'max_latitude': max_latitude,
         'min_latitude': min_latitude
     }
+
+
+def send_email(subject: str, body: str, email: str):
+    logger.add(f"{os.path.dirname(__file__)}/logs/email_exception.log", format="{time} {level} {message}",
+               level="ERROR", rotation="4 MB", compression="zip",
+               encoding="utf-8")
+    logger.add(f"{os.path.dirname(__file__)}/logs/email_exception.log", format="{time} {level} {message}",
+               level="INFO", rotation="4 MB", compression="zip",
+               encoding="utf-8")
+    message = EmailMessage(
+        subject=subject,
+        body=body,
+        to=(email,))
+    try:
+        message.send()
+        logger.info(f"Тема сообщения: {subject} \n"
+                    f"Текст: {body}"
+                    f"Отправлено {email}"
+                    )
+    except Exception as ex:
+        logger.exception(ex)
+        logger.error(f"Ошибка {str(ex)}"
+                     f"Тема сообщения: {subject} \n"
+                     f"Текст: {body}"
+                     f"Отправлено {email}"
+                     )
