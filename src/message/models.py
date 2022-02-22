@@ -1,5 +1,4 @@
 from django.db import models
-from src import adfdsfg
 from src.user.models import User
 
 
