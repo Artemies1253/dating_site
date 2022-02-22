@@ -2,14 +2,14 @@ from django.db.models import Q
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from src.base.permissions import IsAuthorOrReceiver, IsAuthor
+from src.base.permissions import IsAuthor
 from src.message.models import Message
 from src.message.serializers import MessageCreateSerializer, MessageListSerializer, MessageUpdateOrDeleteSerializer
 
 
 class MessageListView(generics.ListAPIView):
     serializer_class = MessageListSerializer
-    permission_classes = [IsAuthorOrReceiver]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         author = self.request.user
