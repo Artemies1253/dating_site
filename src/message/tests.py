@@ -3,7 +3,7 @@ import json
 from django.db.models import Q
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.test import APITestCase
 
 from src.message.models import Message
 from src.message.serializers import MessageListSerializer

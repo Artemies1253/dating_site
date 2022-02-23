@@ -48,8 +48,8 @@ def send_email_of_success_registration(user):
 def verify_user_email_by_token(token):
     payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGOTITHM)
     user = User.objects.get(id=payload['user_id'])
-    if not user.is_verifired:
-        user.is_verifired = True
+    if not user.is_verified:
+        user.is_verified = True
         user.save()
 
     send_email_of_success_registration(user)

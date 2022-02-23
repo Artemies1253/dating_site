@@ -41,7 +41,7 @@ class AuthBackend(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed("Token expired.")
 
         try:
-            user = User.objects.get(id=payload["user_id"])
+            user = User.objects.get(id=payload["user_id"])   #TODO не авторизовывать удаленных пользователей
         except User.DoesNotExist:
             raise exceptions.AuthenticationFailed("No user matching this token was found")
 

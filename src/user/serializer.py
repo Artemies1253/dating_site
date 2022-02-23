@@ -3,7 +3,7 @@ import datetime
 from rest_framework import serializers
 
 from src.base.services import get_data_address, get_avatar_with_water_mark
-from src.user.models import User, Ava, UserImage
+from src.user.models import User, Avatar, UserImage
 
 
 class UserDetailListSerializer(serializers.ModelSerializer):
@@ -15,10 +15,9 @@ class UserDetailListSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = (
-            "email", "is_admin", "is_delete", "password", "is_superuser",
-            "user_permissions", "last_login", "address", "latitude", "longitude"
-        )
+        fields = (
+            "id", "first_name", "last_name", "status_text", "gender", "avatar", "hobby",
+            "about_myself", "favorite_quotes", "purpose_relationship")
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -27,7 +26,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         exclude = (
             "is_admin", "is_delete", "password", "is_superuser",
             "user_permissions", "last_login", "latitude", "longitude",
-        )
+        )   #TODO Заменить exclude на fields
 
     def validate_address(self, value):
         data_address = get_data_address(value)
@@ -35,7 +34,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             serializers.ValidationError("Не корректный адреc")
         return data_address
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data):   #TODO изменение емайла через подтверждение почтой
         avatar = validated_data.get("avatar")
         if avatar:
             instance.avatar = get_avatar_with_water_mark(avatar)
@@ -56,26 +55,20 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UserInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        exclude = ("is_admin", "is_delete", "password", "is_superuser", "user_permissions", "last_login")
-
-
 class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Ava
+        model = Avatar
         fields = ("photo",)
 
     def create(self, validated_data):
         user = validated_data['user']
-        current_avatar = Ava.objects.get(is_active=True, user=user)
-        new_avatar = Ava(**validated_data)
+        current_avatar = Avatar.objects.get(is_active=True, user=user)
+        new_avatar = Avatar(**validated_data)
         new_avatar.save()
         current_avatar.is_active = False
         current_avatar.save()
 
-        return Ava(**validated_data)
+        return Avatar(**validated_data)
 
 
 class ImageSerializer(serializers.ModelSerializer):
