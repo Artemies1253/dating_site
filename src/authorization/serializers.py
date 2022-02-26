@@ -2,7 +2,7 @@ from django.contrib import auth
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 
-from src.authorization.services import create_token
+from src.authorization.services import create_token, send_registration_email
 from src.base.services import get_avatar_with_water_mark, get_data_address
 from src.user.models import User
 
@@ -38,6 +38,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         avatar_with_water_mark = get_avatar_with_water_mark(avatar)
         user.avatar = avatar_with_water_mark
         user.save()
+        send_registration_email(user)
         return user
 
     class Meta:

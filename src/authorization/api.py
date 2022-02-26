@@ -1,13 +1,14 @@
 import jwt
 from django.conf import settings
 from django.contrib import auth
+from django.http import HttpResponseRedirect
 from rest_framework import generics, status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 
 from src.authorization.serializers import RegistrationSerializer, LoginSerializer
 from src.user.models import User
-from .services import create_token, send_registration_email, verify_user_email_by_token
+from .services import create_token, verify_user_email_by_token
 
 
 class RegistrationAPIView(generics.GenericAPIView):
@@ -21,7 +22,6 @@ class RegistrationAPIView(generics.GenericAPIView):
 
             user = User.objects.get(email=serializer.validated_data.get("email"))
 
-            send_registration_email(user)
 
             return Response({"user_id": user.id}, status=status.HTTP_201_CREATED)
 
@@ -53,4 +53,4 @@ class VerifyEmailAPIView(generics.GenericAPIView):
 
     def get(self, request, token):
         verify_user_email_by_token(token)
-        return Response({"success": True}, status=status.HTTP_201_CREATED)
+        return HttpResponseRedirect(redirect_to="/")

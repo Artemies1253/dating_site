@@ -43,7 +43,7 @@ class UserDetailAPIView(generics.RetrieveAPIView):
 
 
 class UserAPIView(generics.GenericAPIView):
-    permissions = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
         serializer = UserInfoSerializer(self.request.user)

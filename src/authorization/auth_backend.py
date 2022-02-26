@@ -45,4 +45,6 @@ class AuthBackend(authentication.BaseAuthentication):
         except User.DoesNotExist:
             raise exceptions.AuthenticationFailed("No user matching this token was found")
 
+        if not user.is_verified:
+            raise exceptions.AuthenticationFailed("User not verified")
         return user, None
