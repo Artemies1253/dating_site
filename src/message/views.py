@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from src.base.permissions import IsAuthor
+from src.base.services import create_notification
 from src.message.models import Message
 from src.message.serializers import MessageCreateSerializer, MessageListSerializer, MessageUpdateOrDeleteSerializer
 
@@ -27,7 +28,9 @@ class MessageCreate(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.validated_data['author'] = self.request.user
-        serializer.save()
+        user = serializer.validated_data['receiver']
+        new_message = serializer.save()
+        create_notification(instance=new_message, user=user)
 
 
 class MessageUpdateOrDelete(generics.UpdateAPIView, generics.DestroyAPIView):

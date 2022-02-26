@@ -91,7 +91,6 @@ class TestUser(APITestCase):
             'hobby': 'new_hobby'
         }
         response = self.client.patch(url, data=update_data, format='json')
-        print(response.json())
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         user_data = User.objects.get(id=self.user2.id)
         serializer_data = UserUpdateSerializer(user_data).data

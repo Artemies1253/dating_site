@@ -104,3 +104,12 @@ def send_email(subject: str, body: str, email: str):
                      f"Текст: {body}"
                      f"Отправлено {email}"
                      )
+
+
+def create_notification(instance, user):
+    from src.notification.models import Notification
+
+    if instance.__class__.__name__ == 'Message':
+        Notification.objects.create(message=instance, user=user)
+    elif instance.__class__.__name__ == 'Like':
+        Notification.objects.create(like=instance, user=user)

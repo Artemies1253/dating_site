@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework import permissions
 
+from src.base.services import create_notification
 from src.like.serializer import CreateLikeSerializer
 from src.like.service import is_mutual_like, send_email_of_like
 from src.user.models import User
@@ -16,13 +17,13 @@ class CreateLike(generics.GenericAPIView):
         request_data["from_like_user_id"] = request.user.id
         serializer = self.serializer_class(data=request_data)
         if serializer.is_valid(raise_exception=True):
-            like = serializer.save()
+            like, like_status = serializer.save()
             liked_user = User.objects.get(id=serializer.validated_data.get("liked_user_id"))
+            create_notification(instance=like, user=liked_user)
             from_like_user = request.user
 
-            if like[1]:
+            if like_status:
                 if is_mutual_like(from_like_user, liked_user):
                     send_email_of_like(from_like_user, liked_user)
 
-            like = like[0]
-            return Response({"id": like.id}, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
