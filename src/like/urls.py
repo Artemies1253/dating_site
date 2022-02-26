@@ -3,5 +3,5 @@ from django.urls import path
 from src.like.api import CreateLike
 
 urlpatterns = [
-    path("create", CreateLike.as_view())
+    path("create", CreateLike.as_view(), name='create_like')
 ]

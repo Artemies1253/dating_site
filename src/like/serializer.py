@@ -24,10 +24,9 @@ class CreateLikeSerializer(serializers.Serializer):
         liked_user_id = self.validated_data.get("liked_user_id")
         from_like_user = User.objects.get(id=from_like_user_id)
         liked_user = User.objects.get(id=liked_user_id)
+        like, like_status = Like.objects.get_or_create(owner_user=from_like_user, liked_user=liked_user)
 
-        like = Like.objects.get_or_create(owner_user=from_like_user, liked_user=liked_user)
-
-        return like
+        return like, like_status
 
 
 class LikeDetailSerializer(serializers.ModelSerializer):
