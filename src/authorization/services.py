@@ -29,7 +29,10 @@ def create_access_token(data: dict, expires_delta: timedelta = 15):
 
 def send_registration_email(user):
     token = create_token(user.id).get("access_token")
-    link = str(reverse(viewname="verify_email", kwargs={"token": token}))
+    domain = settings.HOST
+    link = str(domain) + str(reverse(viewname="verify_email", kwargs={"token": token}))
+    print("http://127.0.0.1:8000/api/v1/auth/verify_email/"+token)
+    print(link)
     body = f"Ваш email был указан при регистрации на сайте Dating Site," \
            f"Если это были не вы, просто проигнорируйте данное сообщение" \
            f"Для окончания регистрации вам не обходимо перейти по ссылке ниже \n" \
@@ -46,7 +49,7 @@ def send_email_of_success_registration(user):
 
 
 def verify_user_email_by_token(token):
-    payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGOTITHM)
+    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGOTITHM)
     user = User.objects.get(id=payload['user_id'])
     if not user.is_verified:
         user.is_verified = True

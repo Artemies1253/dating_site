@@ -9,6 +9,7 @@ try:
 except:
     from config import conf_example as conf
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -101,6 +102,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+HOST = conf.HOST
 
 EMAIL_HOST = conf.EMAIL_HOST
 EMAIL_PORT = conf.EMAIL_PORT

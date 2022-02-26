@@ -84,7 +84,7 @@ def send_email(subject: str, body: str, email: str):
     logger.add(f"{os.path.dirname(__file__)}/logs/email_exception.log", format="{time} {level} {message}",
                level="ERROR", rotation="4 MB", compression="zip",
                encoding="utf-8")
-    logger.add(f"{os.path.dirname(__file__)}/logs/email_exception.log", format="{time} {level} {message}",
+    logger.add(f"{os.path.dirname(__file__)}/logs/info.log", format="{time} {level} {message}",
                level="INFO", rotation="4 MB", compression="zip",
                encoding="utf-8")
     message = EmailMessage(
