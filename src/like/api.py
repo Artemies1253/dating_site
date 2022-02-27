@@ -34,10 +34,8 @@ class ListLikeAPIView(generics.GenericAPIView):
         user = self.request.user
         owner_like_list = Like.objects.filter(owner_user=user)
         liked_user_list = Like.objects.filter(liked_user=user)
-        mutual_sympathy = Like.objects.filter(owner_user=user, liked_user=user)
         data = {
             "owner_like_list": self.serializer_class(instance=owner_like_list, many=True).data,
-            "liked_user_list": self.serializer_class(instance=liked_user_list, many=True).data,
-            "mutual_sympathy": self.serializer_class(instance=mutual_sympathy, many=True).data
+            "liked_user_list": self.serializer_class(instance=liked_user_list, many=True).data
         }
         return Response(data, status=status.HTTP_200_OK)
