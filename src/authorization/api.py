@@ -20,10 +20,7 @@ class RegistrationAPIView(generics.GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
-            user = User.objects.get(email=serializer.validated_data.get("email"))
-
-
-            return Response({"user_id": user.id}, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.GenericAPIView):

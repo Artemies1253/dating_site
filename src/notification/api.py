@@ -15,4 +15,3 @@ class NotificationListView(generics.ListAPIView):
         Notification.objects.update(is_unread=False)
 
         return queryset
-

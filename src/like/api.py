@@ -1,29 +1,43 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
+from rest_framework import generics, mixins, status
 from rest_framework import permissions
+from rest_framework.response import Response
 
-from src.base.services import create_notification
-from src.like.serializer import CreateLikeSerializer
-from src.like.service import is_mutual_like, send_email_of_like
-from src.user.models import User
+from src.base.permissions import IsAuthor
+from src.like.models import Like
+from src.like.serializer import CreateLikeSerializer, LikeDetailSerializer
 
 
-class CreateLike(generics.GenericAPIView):
+class CreateLikeAPIView(generics.GenericAPIView, mixins.CreateModelMixin):
     serializer_class = CreateLikeSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        request_data = request.data.copy()
-        request_data["from_like_user_id"] = request.user.id
-        serializer = self.serializer_class(data=request_data)
-        if serializer.is_valid(raise_exception=True):
-            like, like_status = serializer.save()
-            liked_user = User.objects.get(id=serializer.validated_data.get("liked_user_id"))
-            create_notification(instance=like, user=liked_user)
-            from_like_user = request.user
+        data = request.data.copy()
+        data["owner_user"] = self.request.user.id
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-            if like_status:
-                if is_mutual_like(from_like_user, liked_user):
-                    send_email_of_like(from_like_user, liked_user)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+class DeleteLikeAPIView(generics.DestroyAPIView):
+    serializer_class = CreateLikeSerializer
+    permission_classes = (IsAuthor,)
+    queryset = Like.objects.all()
+
+
+class ListLikeAPIView(generics.GenericAPIView):
+    serializer_class = LikeDetailSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        user = self.request.user
+        owner_like_list = Like.objects.filter(owner_user=user)
+        liked_user_list = Like.objects.filter(liked_user=user)
+        mutual_sympathy = Like.objects.filter(owner_user=user, liked_user=user)
+        data = {
+            "owner_like_list": self.serializer_class(instance=owner_like_list, many=True).data,
+            "liked_user_list": self.serializer_class(instance=liked_user_list, many=True).data,
+            "mutual_sympathy": self.serializer_class(instance=mutual_sympathy, many=True).data
+        }
+        return Response(data, status=status.HTTP_200_OK)

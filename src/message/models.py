@@ -1,4 +1,6 @@
 from django.db import models
+
+from src.base.services import create_notification
 from src.user.models import User
 
 

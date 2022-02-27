@@ -43,8 +43,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
 
-class Avatar(models.Model):  #TODO переименовать в Avatar
+
+class Avatar(models.Model):
     photo = models.ImageField(default='/media/avatar/default_avatar.jpg',
                               upload_to=get_path_upload_avatar,
                               validators=[FileExtensionValidator(allowed_extensions=["jpg"])])
@@ -52,8 +56,22 @@ class Avatar(models.Model):  #TODO переименовать в Avatar
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     is_active = models.BooleanField(default=True, blank=True)
 
+    def __str__(self):
+        return f"id - {self.id} ,аватар пользователя - {self.user}"
+
+    class Meta:
+        verbose_name = "Аватар"
+        verbose_name_plural = "Аватары"
+
 
 class UserImage(models.Model):
     image = models.ImageField()
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='image')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"id - {self.id}, изображение пользователя {self.user}"
+
+    class Meta:
+        verbose_name = "Изображение пользователя"
+        verbose_name_plural = "Изображения пользователей"

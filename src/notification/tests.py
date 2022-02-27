@@ -28,15 +28,15 @@ class TestNotificationListView(APITestCase):
 
         self.like1 = Like.objects.create(owner_user=self.user1, liked_user=self.user2)
 
-        self.notification1 = Notification.objects.create(message=self.message1, user=self.user2)
-        self.notification2 = Notification.objects.create(like=self.like1, user=self.user2)
+        self.notification = Notification.objects.create(message=self.message1, user=self.user1)
+        self.notification = Notification.objects.create(like=self.like1, user=self.user1)
 
         self.count_notification = Notification.objects.all().count()
 
     def test_notification_list(self):
         url = reverse('notification_list')
-        self.client.force_authenticate(self.user2)
-        notifications = Notification.objects.filter(is_unread=True, user=self.user2)
+        self.client.force_authenticate(self.user1)
+        notifications = Notification.objects.filter(is_unread=True, user=self.user1)
         self.assertTrue(notifications)
         serializer_data = NotificationSerializer(notifications, many=True).data
         response = self.client.get(url)
@@ -69,8 +69,8 @@ class TestNotificationListView(APITestCase):
         self.assertEqual(self.count_notification, Notification.objects.all().count())
         url = reverse('create_like')
         data = {
-            'liked_user_id': self.user3.id,
-            'from_like_user_id': self.user1.id,
+            'liked_user': self.user3.id,
+            'owner_user': self.user1.id,
         }
         json_data = json.dumps(data)
         self.client.force_authenticate(self.user1)

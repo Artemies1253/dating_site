@@ -6,7 +6,7 @@ from src.user.models import User
 
 
 class Notification(models.Model):
-    message = models.OneToOneField(to=Message, null=True, blank=True, on_delete=models.CASCADE)
+    message = models.ForeignKey(to=Message, null=True, blank=True, on_delete=models.CASCADE)
     like = models.OneToOneField(to=Like, null=True, blank=True, on_delete=models.CASCADE)
     is_unread = models.BooleanField(default=True)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)

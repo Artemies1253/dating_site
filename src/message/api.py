@@ -28,9 +28,8 @@ class MessageCreate(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.validated_data['author'] = self.request.user
-        user = serializer.validated_data['receiver']
-        new_message = serializer.save()
-        create_notification(instance=new_message, user=user)
+        message = serializer.save()
+        create_notification(instance=message, user=message.receiver)
 
 
 class MessageUpdateOrDelete(generics.UpdateAPIView, generics.DestroyAPIView):

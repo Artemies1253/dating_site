@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.urls import reverse
@@ -22,8 +23,8 @@ class TestLikeView(APITestCase):
     def test_create_like(self):
         url = reverse('create_like')
         data = {
-            'liked_user_id': self.user2.id,
-            'from_like_user_id': self.user1.id,
+            'owner_user': self.user1.id,
+            'liked_user': self.user2.id,
         }
         json_data = json.dumps(data)
         self.client.force_authenticate(self.user1)

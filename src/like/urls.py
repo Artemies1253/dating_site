@@ -1,7 +1,9 @@
 from django.urls import path
 
-from src.like.api import CreateLike
+from src.like.api import CreateLikeAPIView, DeleteLikeAPIView, ListLikeAPIView
 
 urlpatterns = [
-    path("create", CreateLike.as_view(), name='create_like')
+    path("create", CreateLikeAPIView.as_view(), name='create_like'),
+    path("<int:pk>", DeleteLikeAPIView.as_view()),
+    path("list", ListLikeAPIView.as_view())
 ]

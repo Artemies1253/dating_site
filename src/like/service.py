@@ -24,5 +24,5 @@ def send_email_of_like(user_1: User, user_2: User):
         body=get_mutual_sympathy_text(user_1),
         to=(user_2.email,)
     )
-    connection = mail.get_connection()
-    connection.send_messages((email_1, email_2))
+    # connection = mail.get_connection()
+    # connection.send_messages((email_1, email_2))

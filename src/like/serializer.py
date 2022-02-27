@@ -1,32 +1,33 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
+from src.base.services import create_notification
 from src.like.models import Like
+from src.like.service import is_mutual_like, send_email_of_like
 from src.user.models import User
 
 
-class CreateLikeSerializer(serializers.Serializer):
-    from_like_user_id = serializers.IntegerField()
-    liked_user_id = serializers.IntegerField()
+class CreateLikeSerializer(serializers.ModelSerializer):
 
-    def validate_liked_user_id(self, value):
-        if not User.objects.filter(id=value, is_delete=False).exists():
-            raise ValidationError("Юзер с таким id не найден")
-        return value
+    class Meta:
+        model = Like
+        fields = ("owner_user", "liked_user")
 
-    def validate_from_like_user_id(self, value):
-        if not User.objects.filter(id=value).exists():
-            raise ValidationError("Юзер с таким id не найден")
-        return value
+    def validate(self, attrs):
+        owner_user = attrs.get("owner_user")
+        liked_user = attrs.get("liked_user")
+        if Like.objects.filter(owner_user=owner_user, liked_user=liked_user).exists():
+            raise ValidationError("Пользователь уже поставил данному пользователю лайк")
 
-    def save(self, **kwargs):
-        from_like_user_id = self.validated_data.get("from_like_user_id")
-        liked_user_id = self.validated_data.get("liked_user_id")
-        from_like_user = User.objects.get(id=from_like_user_id)
-        liked_user = User.objects.get(id=liked_user_id)
-        like, like_status = Like.objects.get_or_create(owner_user=from_like_user, liked_user=liked_user)
+        return attrs
 
-        return like, like_status
+    def create(self, validated_data):
+        owner_user = validated_data.get("owner_user")
+        liked_user = validated_data.get("liked_user")
+        like = Like.objects.create(owner_user=owner_user, liked_user=liked_user)
+        create_notification(instance=like, user=liked_user)
+
+        return like
 
 
 class LikeDetailSerializer(serializers.ModelSerializer):
