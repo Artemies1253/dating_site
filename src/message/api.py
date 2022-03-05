@@ -9,6 +9,7 @@ from src.message.serializers import MessageCreateSerializer, MessageListSerializ
 
 
 class MessageListView(generics.ListAPIView):
+    """Отобразить список всех сообщений с пользователем {id}"""
     serializer_class = MessageListSerializer
     permission_classes = [IsAuthenticated]
 
