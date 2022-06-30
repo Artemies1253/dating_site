@@ -31,8 +31,6 @@ def send_registration_email(user):
     token = create_token(user.id).get("access_token")
     domain = settings.HOST
     link = str(domain) + str(reverse(viewname="verify_email", kwargs={"token": token}))
-    print("http://127.0.0.1:8000/api/v1/auth/verify_email/"+token)
-    print(link)
     body = f"Ваш email был указан при регистрации на сайте Dating Site," \
            f"Если это были не вы, просто проигнорируйте данное сообщение" \
            f"Для окончания регистрации вам не обходимо перейти по ссылке ниже \n" \

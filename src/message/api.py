@@ -29,7 +29,7 @@ class MessageCreate(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.validated_data['author'] = self.request.user
-        message = serializer.save()
+        message = serializer.save(author=self.request.user)
         create_notification(instance=message, user=message.receiver)
 
 

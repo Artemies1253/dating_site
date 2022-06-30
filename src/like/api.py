@@ -2,7 +2,7 @@ from rest_framework import generics, mixins, status
 from rest_framework import permissions
 from rest_framework.response import Response
 
-from src.base.permissions import IsAuthor
+from src.base.permissions import IsOwnerLike
 from src.like.models import Like
 from src.like.serializer import CreateLikeSerializer, LikeDetailSerializer
 
@@ -22,7 +22,7 @@ class CreateLikeAPIView(generics.GenericAPIView, mixins.CreateModelMixin):
 
 class DeleteLikeAPIView(generics.DestroyAPIView):
     serializer_class = CreateLikeSerializer
-    permission_classes = (IsAuthor,)
+    permission_classes = (IsOwnerLike,)
     queryset = Like.objects.all()
 
 
